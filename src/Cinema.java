@@ -13,7 +13,7 @@ public class Cinema {
     }
 
     public String[][] generateLayoutCinema() {
-        this.layoutCinema = new String[this.row + 1 ][this.seatPerRow + 1 ];
+        this.layoutCinema = new String[this.row + 1 ][this.seatPerRow + 1];
         for (var i = 0; i < this.layoutCinema.length; i++) {
             for ( var j = 0 ; j < this.layoutCinema[i].length; j++) {
                 if (i == 0 ) {
@@ -101,27 +101,19 @@ public class Cinema {
         return sellTicket;
     }
     public void run() {
-        boolean flag = false;
-        while (!flag) {
+        while (true) {
             System.out.println("\n 1.Show the seats \n 2.Buy a ticket \n 3. Statistics \n 0. Exit");
 
             Scanner scanner = new Scanner(System.in);
             int menu = scanner.nextInt();
             switch (menu) {
-                case 1:
-                    printLayoutCinema();
-                    break;
-                case 2:
-                    sellPriceBySeatInRow();
-                    break;
-                case 3:
-                    statisticsCinema();
-                    break;
-                case 0:
-                    flag = true;
-                    break;
-                default:
-                    break;
+                case 1 -> printLayoutCinema();
+                case 2 -> sellPriceBySeatInRow();
+                case 3 -> statisticsCinema();
+                case 0 -> {
+                    return ;
+                }
+                default -> System.out.println(" Invalid choice");
             }
         }
     }

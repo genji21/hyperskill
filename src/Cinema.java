@@ -14,6 +14,7 @@ public class Cinema {
 
     public String[][] generateLayoutCinema() {
         this.layoutCinema = new String[this.row + 1 ][this.seatPerRow + 1];
+        this.layoutCinema[0][0] = " ";
         for (var i = 0; i < this.layoutCinema.length; i++) {
             for ( var j = 0 ; j < this.layoutCinema[i].length; j++) {
                 if (i == 0 ) {
@@ -21,7 +22,6 @@ public class Cinema {
                 }
                 else {
                     this.layoutCinema[i][j] = "S";
-                    this.layoutCinema[0][0] = " ";
                 }
             }
             this.layoutCinema[i][0] = String.valueOf(i) ;
@@ -49,30 +49,29 @@ public class Cinema {
         return totalSeat < 60 ?  (totalSeat * 10) : ( (frontHalfOfSeat * this.seatPerRow * 10)  + (backHalfOfSeat * this.seatPerRow * 8));
     }
 
-    public void sellPriceBySeatInRow () {
+    public void sellPriceBySeatInRow (Scanner scanner) {
         int totalSeat = this.row * this.seatPerRow;
-        int frontHalfOfSeat = this.row  / 2 ;
+        int frontHalfOfSeat = this.row / 2;
         int rowNumber = 0;
         int seatInRow = 0;
-        Scanner scanner = new Scanner(System.in);
 
-        while ( rowNumber > this.row || seatInRow > this.seatPerRow || rowNumber < 1 || seatInRow < 1) {
-            if (rowNumber > this.row || seatInRow > this.seatPerRow ) {
+        while (rowNumber < 1 || rowNumber > this.row || seatInRow < 1 || seatInRow > this.seatPerRow) {
+            System.out.println("Enter a row number (1-" + this.row + "):");
+            rowNumber = scanner.nextInt();
+            System.out.println("Enter a seat in that row (1-" + this.seatPerRow + "):");
+            seatInRow = scanner.nextInt();
+            if (rowNumber < 1 || rowNumber > this.row || seatInRow < 1 || seatInRow > this.seatPerRow) {
                 System.out.println("Wrong input!");
             }
-            System.out.println("Enter a row number");
-            rowNumber = scanner.nextInt();
-            System.out.println("Enter a seat in row in that row ");
-            seatInRow = scanner.nextInt();
         }
 
-        int priceBySeatInRow = totalSeat >= 60 ?  (row <= frontHalfOfSeat ? 10 : 8 ) : 10;
+        int priceBySeatInRow = totalSeat >= 60 ? (rowNumber <= frontHalfOfSeat ? 10 : 8) : 10;
 
-        boolean isSellSuccess =  setLayoutCinemaBySeatSell(rowNumber,seatInRow);
+        boolean isSellSuccess = setLayoutCinemaBySeatSell(rowNumber, seatInRow);
         if (isSellSuccess) {
             this.currentIncome += priceBySeatInRow;
-           }
-        System.out.println("Ticket Price : " + String.valueOf(priceBySeatInRow + "$"));
+        }
+        System.out.println("Ticket Price: " + priceBySeatInRow + "$");
     }
 
     public boolean setLayoutCinemaBySeatSell(int row, int seatInRow) {
@@ -100,20 +99,20 @@ public class Cinema {
         }
         return sellTicket;
     }
-    public void run() {
+    public void run(Scanner scanner) {
         while (true) {
-            System.out.println("\n 1.Show the seats \n 2.Buy a ticket \n 3. Statistics \n 0. Exit");
-
-            Scanner scanner = new Scanner(System.in);
+            System.out.println("\n1. Show the seats \n2. Buy a ticket \n3. Statistics \n0. Exit");
+            System.out.print("Enter your choice: ");
             int menu = scanner.nextInt();
             switch (menu) {
                 case 1 -> printLayoutCinema();
-                case 2 -> sellPriceBySeatInRow();
+                case 2 -> sellPriceBySeatInRow(scanner);
                 case 3 -> statisticsCinema();
                 case 0 -> {
-                    return ;
+                    System.out.println("Thank you for using Cinema System. Goodbye!");
+                    return;
                 }
-                default -> System.out.println(" Invalid choice");
+                default -> System.out.println("Invalid choice! Please try again.");
             }
         }
     }
